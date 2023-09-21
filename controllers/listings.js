@@ -1,16 +1,27 @@
 import CarListing from '../models/CarListing.js';
 
 async function createSalePost(req, res) {
-    try {
-      const postData = req.body;
-      const images = req.files.map(file => 'uploads/compressed/' + file.filename);
-      const carListing = new CarListing({ ...postData, images });
-      await carListing.save();
-      res.status(201).json(carListing);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to create sale post' });
+  try {
+    if (!Array.isArray(req.body.images) || req.body.images.some(url => typeof url !== 'string')) {
+        return res.status(400).send("Invalid image URLs provided.");
     }
-  }
+
+    const { Make, Model, Year, Category, Mileage, Condition, Description, user, images } = req.body;
+    
+    const newListing = new CarListing({
+        Make, Model, Year, Category, Mileage, Condition, Description, user, images
+    });
+
+    await newListing.save();
+
+    res.status(201).json(newListing);
+} catch (error) {
+    res.status(400).json({
+        message: 'Error creating listing',
+        error: error.message
+    });
+}
+};
 
 async function getSalePostById(req, res) {
   try {

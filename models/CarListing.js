@@ -22,6 +22,10 @@ const carListingSchema = new mongoose.Schema({
   Description: {
     type: String,
   },
+  Date: { 
+    type: Date,
+    default: Date.now,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

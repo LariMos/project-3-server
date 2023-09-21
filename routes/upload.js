@@ -1,15 +1,15 @@
 import express from 'express';
-import uploadController from '../controllers/upload.js';
-import multer from 'multer';
+import { upload } from '../middleware/multer.js'; // the multer setup
+import { uploadToCloudinary } from '../controllers/uploadController.js'; // your Cloudinary logic
+
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/compressed' });
 
 router.get('/', (req, res) => {
   res.send('Hello from the upload route!');
 });
 
 // Handle multiple image uploads
-router.post('/', upload.array('images'), uploadController.uploadImages);
+router.post('/upload', upload.array('images', 5), uploadToCloudinary);
 
 export default router;

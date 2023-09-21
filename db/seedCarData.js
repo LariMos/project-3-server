@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
-const CarListing = require('../models/CarListing');
-const data = require('./Car_info.json');
-const connectToMongoDB = require('./connection');
-const fs = require('fs');
+import { connection } from 'mongoose';
+import CarListing from '../models/CarListing';
+import { results } from './Car_info.json';
+import connectToMongoDB from './connection';
+import fs from 'fs';
 
 async function seedData() {
   try {
-    const carListings = data.results; // Access the car listings from the "results" key
+    const carListings = results; // Access the car listings from the "results" key
 
     for (let i = 0; i < carListings.length; i++) {
       const carListing = new CarListing(carListings[i]);
@@ -15,10 +15,10 @@ async function seedData() {
     }
 
     console.log('Data seeded successfully');
-    mongoose.connection.close();
+    connection.close();
   } catch (error) {
     console.error('Error seeding data:', error);
-    mongoose.connection.close();
+    connection.close();
   }
 }
 

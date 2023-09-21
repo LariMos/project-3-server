@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const User = require('../models/User'); 
-const CarListing = require('../models/CarListing'); 
-const connectToMongoDB = require('./connection');
+import mongoose from 'mongoose';
+import { deleteMany, insertMany } from '../models/User'; 
+import CarListing, { deleteMany as _deleteMany } from '../models/CarListing'; 
+import connectToMongoDB from './connection';
 
 // User data to be seeded
 const usersData = [
@@ -22,6 +22,7 @@ const usersData = [
       Mileage: 50000,
       Condition: 'Used',
       Description: 'Lorem ipsum dolor sit amet.',
+      images: ['https://example.com/mock-image-1.jpg', 'https://example.com/mock-image-2.jpg'] // Example mock image URLs
     },
     {
       Make: 'Honda',
@@ -31,17 +32,19 @@ const usersData = [
       Mileage: 40000,
       Condition: 'Used',
       Description: 'Lorem ipsum dolor sit amet.',
+      images: ['https://example.com/mock-image-3.jpg', 'https://example.com/mock-image-4.jpg'] // Example mock image URLs
     },
   ];
+  
   
   async function seedData() {
     try {
       await connectToMongoDB(); // Establish the database connection
   
-      await User.deleteMany(); // Remove existing users
-      await CarListing.deleteMany(); // Remove existing car listings
+      await deleteMany(); // Remove existing users
+      await _deleteMany(); // Remove existing car listings
   
-      const createdUsers = await User.insertMany(usersData); // Insert the user data and get the created user objects
+      const createdUsers = await insertMany(usersData); // Insert the user data and get the created user objects
   
       for (const carListingData of carListingsData) {
         const carListing = new CarListing(carListingData);
